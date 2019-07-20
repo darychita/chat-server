@@ -1,0 +1,9 @@
+GET /users - get all users or return 404                                   |   if server crashed - 500 
+GET /users/:username - get your with specified username or return 404      |
+----------------
+POST /users - create new user (from body) and return it or return 400 Bad Request
+----------------
+PATCH /users/:username - update user by username with specified params in body or return 404 if this user not found
+                                                                               or return 400 if you try to update username
+----------------
+DELETE /users/:username - delete user by specified id or return 404 if this user not found
