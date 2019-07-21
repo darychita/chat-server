@@ -11,6 +11,7 @@ app.use(express.json());
 // app.use(basicAuth)
 // ========================================================
 // GET
+app.get("/",  (req, res) => res.send("Users here"));
 app.get("/users", (req, res) => {
     User.find({})
         .then((users) => !!users.length ? res.send(users) : res.status(404).send())
