@@ -12,7 +12,8 @@ app.use(express.json());
 // ========================================================
 // GET
 app.get("/users", basicAuth, (req, res) => {
-    if(req.user.role === "ADMIN") {
+    console.log("line15", req.user);
+    if(req.user._doc.role == "ADMIN") {
         User.find({})
         .then((users) => !!users.length ? res.send(users) : res.status(404).send())
         .catch((error) => res.status(500).send(error));
@@ -34,7 +35,7 @@ app.get("/users/:username", basicAuth, (req, res) => {
 // ==========================================================
 // POST
 
-app.post("/users", basicAuth, (req, res) => {
+app.post("/users", (req, res) => {
     const user = new User(req.body);
 
     user.save()
@@ -46,7 +47,7 @@ app.post("/users", basicAuth, (req, res) => {
 // PATCH
 
 app.patch("/users/:username", basicAuth, (req, res) => {
-    if(req.user.role === "USER") {
+    if(req.user._doc.role === "USER") {
         const updates = Object.keys(req.body);
 
         if(updates.includes("username")){
@@ -54,11 +55,12 @@ app.patch("/users/:username", basicAuth, (req, res) => {
         }
 
         try{
-            User.findOneAndUpdate({username: req.params.username}, res.body, { new: true, runValidators: true} )
+            User.findOneAndUpdate({username: req.params.username}, req.body, { new: true, runValidators: true} )
             .then(user => {
-                if(Object.keys(user).length == 0) return res.send(404);
+                if(Object.keys(user).length == 0) return res.status(404).send();
                 res.send(user);
             });
+           
         } catch(e) {
             console.log(e);
             res.status(500).send(e);
@@ -74,7 +76,7 @@ app.patch("/users/:username", basicAuth, (req, res) => {
 // DELETE
 
 app.delete("/users/:username", basicAuth, (req, res) => {
-    if(req.user.role === "USER") {
+    if(req.user._doc.role === "USER") {
         try{
             User.findOneAndDelete({username: req.params.username})
                 .then((user) => res.status(200).send(user))

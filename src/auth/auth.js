@@ -3,9 +3,6 @@ const User = require("../model/User");
 async function basicAuth(req, res, next) {
     console.log(req.headers.authorization);
     // make authenticate path public
-    // if (req.path === '/q') {
-    //     return next();
-    // }
 
     // check for basic auth header
     if (!req.headers.authorization || req.headers.authorization.indexOf('Basic ') === -1) {
@@ -26,7 +23,6 @@ async function basicAuth(req, res, next) {
     req.user = user
     
     next();
-    console.log("hey")
 }
 
 
