@@ -11,8 +11,8 @@ app.use(express.json());
 // app.use(basicAuth)
 // ========================================================
 // GET
-app.get("/",  (req, res) => res.send("Users here"));
-app.get("/users", (req, res) => {
+// app.get("/",  (req, res) => res.send("Users here"));
+app.get("/users", basicAuth, (req, res) => {
     User.find({})
         .then((users) => !!users.length ? res.send(users) : res.status(404).send())
         .catch((error) => res.status(500).send());
@@ -24,7 +24,7 @@ app.get("/users", (req, res) => {
 //     res.send("you passed")
 // })
 
-app.get("/users/:username", (req, res) => {
+app.get("/users/:username", basicAuth, (req, res) => {
 
     const { username } = req.params;
 
@@ -36,7 +36,7 @@ app.get("/users/:username", (req, res) => {
 // ==========================================================
 // POST
 
-app.post("/users", (req, res) => {
+app.post("/users", basicAuth, (req, res) => {
     const user = new User(req.body);
 
     user.save()
@@ -69,7 +69,7 @@ app.patch("/users/:username", basicAuth, (req, res) => {
 // ============================================================
 // DELETE
 
-app.delete("/users/:username", (req, res) => {
+app.delete("/users/:username", basicAuth, (req, res) => {
     try{
         User.findOneAndDelete({username: req.params.username})
             .then((user) => res.status(200).send(user))
