@@ -11,18 +11,16 @@ app.use(express.json());
 // app.use(basicAuth)
 // ========================================================
 // GET
-// app.get("/",  (req, res) => res.send("Users here"));
 app.get("/users", basicAuth, (req, res) => {
-    User.find({})
+    if(req.user.role === "ADMIN") {
+        User.find({})
         .then((users) => !!users.length ? res.send(users) : res.status(404).send())
-        .catch((error) => res.status(500).send());
+        .catch((error) => res.status(500).send(error));
+    } else {
+        res.status(403).send();
+    }
+    
 }); 
-// app.post('/q', basicAuth, function(req, res) {
-//     // authenticate(req.body)
-//     //     .then(user => user ? res.send(user) : res.status(400).send({ message: 'Username or password is incorrect' }))
-//     //     .catch(err => next(err));
-//     res.send("you passed")
-// })
 
 app.get("/users/:username", basicAuth, (req, res) => {
 
@@ -48,35 +46,46 @@ app.post("/users", basicAuth, (req, res) => {
 // PATCH
 
 app.patch("/users/:username", basicAuth, (req, res) => {
-    const updates = Object.keys(req.body);
+    if(req.user.role === "USER") {
+        const updates = Object.keys(req.body);
 
-    if(updates.includes("username")){
-        return res.status(400).send("Username cannot be updated!");
+        if(updates.includes("username")){
+            return res.status(400).send("Username cannot be updated!");
+        }
+
+        try{
+            User.findOneAndUpdate({username: req.params.username}, res.body, { new: true, runValidators: true} )
+            .then(user => {
+                if(Object.keys(user).length == 0) return res.send(404);
+                res.send(user);
+            });
+        } catch(e) {
+            console.log(e);
+            res.status(500).send(e);
+        }
+    } else {
+        res.status(403).send();
     }
 
-    try{
-        User.findOneAndUpdate({username: req.params.username}, res.body, { new: true, runValidators: true} )
-        .then(user => {
-            if(Object.keys(user).length == 0) return res.send(404);
-            res.send(user);
-        });
-    } catch(e) {
-        console.log(e);
-        res.status(500).send(e);
-    }
+    
 });
 
 // ============================================================
 // DELETE
 
 app.delete("/users/:username", basicAuth, (req, res) => {
-    try{
-        User.findOneAndDelete({username: req.params.username})
-            .then((user) => res.status(200).send(user))
-            .catch((error) => res.status(404).send());
-    } catch(e) {
-        res.status(500).send(e);
+    if(req.user.role === "USER") {
+        try{
+            User.findOneAndDelete({username: req.params.username})
+                .then((user) => res.status(200).send(user))
+                .catch((error) => res.status(404).send());
+        } catch(e) {
+            res.status(500).send(e);
+        }
+    } else {
+        res.status(403).send();
     }
+    
 });
 
 app.listen(port, ()=> {

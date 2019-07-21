@@ -34,6 +34,11 @@ const User = mongoose.model("User", {
         trim: true,
         required: true,
         minlength: 6
+    },
+    role: { 
+        type: String,
+        enum: ["ADMIN", "USER"],
+        default: "USER"
     }
 });
 
