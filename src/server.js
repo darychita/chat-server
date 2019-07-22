@@ -1,5 +1,8 @@
 const express = require("express");
 const {basicAuth, authenticate} = require("./auth/auth");
+const processFile = require("./crypto");
+const path = require("path");
+const fs = require("fs");
 require("./db/mongoose");
 
 const User = require("./model/User");
@@ -39,7 +42,11 @@ app.post("/users", (req, res) => {
     const user = new User(req.body);
 
     user.save()
-        .then(() => res.status(201).send(user))
+        .then(() => {
+            console.log(user.username);
+            const result = processFile(user.password);
+            res.status(201).send(result);
+        })
         .catch((error) => res.status(400).send(error));
 }); 
 
