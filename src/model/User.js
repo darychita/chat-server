@@ -22,13 +22,13 @@ const User = mongoose.model("User", {
         type: Number, 
         required: true
     },
-    login: {
-        type: String, 
-        trim: true,
-        required: true,
-        minlength: 5
+    // login: {
+    //     type: String, 
+    //     trim: true,
+    //     required: true,
+    //     minlength: 5
        
-    },
+    // },
     password: {
         type: String, 
         trim: true,
