@@ -37,7 +37,9 @@ app.get("/users/:username", basicAuth, (req, res) => {
 
 // ==========================================================
 // POST
-
+app.post("/auth", basicAuth, (req, res) => {
+    res.status(200).send("Login successful");
+});
 app.post("/users", (req, res) => {
     const user = new User(req.body);
 
