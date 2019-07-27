@@ -38,7 +38,7 @@ app.get("/users/:username", basicAuth, (req, res) => {
 // ==========================================================
 // POST
 app.post("/auth", basicAuth, (req, res) => {
-    res.status(200).send(req.user);
+    res.status(200).send(req.user._doc);
 });
 app.post("/users", (req, res) => {
     const user = new User(req.body);
