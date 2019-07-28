@@ -69,33 +69,3 @@ module.exports = {basicAuth, authenticate};
 
 
 
-
-// function myAuthorizer(username, password) {
-//     User.findOne({username}).then((user) => {
-//         console.log(user);
-//         console.log(username);
-//         console.log(password);
-//         if(!user) {
-//             console.log("no user");
-//             return false;
-
-//         }
-//         if(password !== user.password) {
-//             console.log("wrong pass");
-//             return false;
-//         }
-//         return true;
-//     }).catch((e) => {
-//         console.log(e);
-//         return false;
-//     });
-// }
-
-// function getUnauthorizedResponse(req) {
-//     return req.auth ? ('Credentials ' + req.auth.user + ':' + req.auth.password + ' rejected') : 'No credentials provided'
-// }
-
-// module.exports ={
-//     myAuthorizer,
-//     getUnauthorizedResponse
-// }

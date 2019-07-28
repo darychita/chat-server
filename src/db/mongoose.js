@@ -7,7 +7,7 @@ const mongoose = require("mongoose");
 // });
 
 
-mongoose.connect("mongodb+srv://mainUser:j9bDtLxZniGHgMeS@cluster0-4o0fs.mongodb.net/test?retryWrites=true&w=majority", {
+mongoose.connect("<url>", {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: true
